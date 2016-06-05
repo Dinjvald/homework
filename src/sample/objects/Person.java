@@ -9,8 +9,8 @@ public class Person {
 
     private SimpleStringProperty name = new SimpleStringProperty("");
     private boolean isOverAveragePrice;
-    private int totalExpenses;
-    private int difference;
+    private double totalExpenses;
+    private double difference;
 
     public Person() {
     }
@@ -31,11 +31,11 @@ public class Person {
         this.name.set(name);
     }
 
-    public int getTotalExpenses() {
+    public double getTotalExpenses() {
         return totalExpenses;
     }
 
-    public void setTotalExpenses(int totalExpenses) {
+    public void setTotalExpenses(double totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 
@@ -47,11 +47,11 @@ public class Person {
         this.isOverAveragePrice = isOverAveragePrice;
     }
 
-    public int getDifference() {
+    public double getDifference() {
         return difference;
     }
 
-    public void setDifference(int difference) {
+    public void setDifference(double difference) {
         this.difference = difference;
     }
 

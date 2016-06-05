@@ -17,7 +17,7 @@
         </Label>
         <Button fx:id="btnAddName" layoutX="95.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Add Name" />
         <Button fx:id="btnAddService" layoutX="202.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Add service" />
-        <Button layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#levelExpenses" prefWidth="100.0" text="Calculate" />
+        <Button fx:id="btnCalculate" layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Calculate" />
         <ListView fx:id="namesList" layoutX="14.0" layoutY="90.0" prefHeight="232.0" prefWidth="189.0" />
       <TableView fx:id="tableService" layoutX="14.0" layoutY="331.0" prefHeight="200.0" prefWidth="475.0">
         <columns>

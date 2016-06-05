@@ -53,10 +53,10 @@ public class AddServiceController {
     @FXML
     private void actionAddService(ActionEvent actionEvent) {
         service.setServiceName(txtServiceName.getText());
-        service.setPrice(txtPrice.getText() + NUMBERS_AFTER_DECIMAL_POINT);
+        service.setPrice(txtPrice.getText());
         service.setPerson((Person) chboxChoosePerson.getValue());
         if (!isServiceValid()){
-            alertInformation("Alert", "Don't leave blank fiend.\n" + "Use only whole numbers.");
+            alertInformation("Alert", "Don't leave blank fiend.\n" + "Use . to separate decimals");
             return;
         }
         actionClose(actionEvent);
@@ -80,7 +80,7 @@ public class AddServiceController {
         service.getServiceName();
         if (service.getServiceName().equals("")) return false;
         try {
-            Integer.parseInt(service.getPrice());
+            Double.parseDouble(service.getPrice());
         } catch (NumberFormatException ex) {
             return false;
         }

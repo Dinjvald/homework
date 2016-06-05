@@ -22,6 +22,7 @@ import sample.objects.Service;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -102,6 +103,8 @@ public class MainController implements Initializable {
             public void onChanged(Change<? extends Person> c) {
                 addServiceController.setList(collectionPerson.getPersonList());
                 addServiceController.updateChoiseBox();
+                txtareaTransactions.clear();
+                displayTotalAndAverageExpenses();
             }
         });
 
@@ -121,12 +124,16 @@ public class MainController implements Initializable {
         collectionService.getServiceList().addListener(new ListChangeListener<Service>() {
             @Override
             public void onChanged(Change<? extends Service> c) {
-                int allExpenses = countAllExpenses();
-                lblTotal.setText(intToString(allExpenses));
-                int averageExpenses = countAverageExpenses(allExpenses);
-                lblAverage.setText(intToString(averageExpenses));
+                displayTotalAndAverageExpenses();
             }
         });
+    }
+
+    private void displayTotalAndAverageExpenses() {
+        double allExpenses = countAllExpenses();
+        lblTotal.setText(roundDoubleTo2Dec(allExpenses));
+        double averageExpenses = countAverageExpenses(allExpenses);
+        lblAverage.setText(roundDoubleTo2Dec(averageExpenses));
     }
 
     private void showNameWindow() {
@@ -175,6 +182,8 @@ public class MainController implements Initializable {
                 namesList.getSelectionModel().clearSelection();
                 namesList.getSelectionModel().select(service.getPerson());
                 break;
+            case "btnCalculate":
+                levelExpenses();
         }
     }
 
@@ -195,57 +204,57 @@ public class MainController implements Initializable {
 
     private void countPersonTotalExpenses(Person person) {
         if (person.getName().equals("ALL")) {
-            lblPersonTotal.setText("Total: " + intToString(countAllExpenses()));
+            lblPersonTotal.setText("Total: " + doubleToString(countAllExpenses()));
             return;
         }
         ObservableList<Service> list = collectionService.getServiceList();
-        int sum = 0;
+        double sum = 0;
         for (Service service : list) {
             if (service.getPerson().equals(person)) {
-                sum += stringToInt(service.getPrice());
+                sum += stringToDouble(service.getPrice());
             }
         }
         person.setTotalExpenses(sum);
-        lblPersonTotal.setText(person.getName() + ": " + intToString(sum));
+        lblPersonTotal.setText(person.getName() + ": " + doubleToString(sum));
     }
 
-    private int countAllExpenses() {
+    private double countAllExpenses() {
         ObservableList<Service> list = collectionService.getServiceList();
-        int sum = 0;
+        double sum = 0;
         for (Service service : list) {
-            sum += stringToInt(service.getPrice());
+            sum += stringToDouble(service.getPrice());
         }
         return sum;
     }
 
-    private int countAverageExpenses(int total) {
+    private double countAverageExpenses(double total) {
         int count = collectionPerson.getPersonCount() - PERSON_REPRESENTS_ALL_INDEX;
+        if (count == 0) return 0.00;
         return total / count;
     }
 
-    @FXML
     private void levelExpenses() {
         ObservableList<Person> personList = collectionPerson.getPersonList();
-        int total = countAllExpenses();
+        double total = countAllExpenses();
         if (!canProceedFurther(total, personList)) return;
-        int average = countAverageExpenses(total);
+        double average = countAverageExpenses(total);
 
         txtareaTransactions.clear();
         evaluateCreditorsAndDebtors(personList, average);
-        HashMap<String, Integer> debtors = getDebtors(personList);
-        HashMap<String, Integer> creditors = getCreditors(personList);
+        HashMap<String, Double> debtors = getDebtors(personList);
+        HashMap<String, Double> creditors = getCreditors(personList);
         giveResult(debtors, creditors);
 
     }
 
-    private void giveResult(HashMap<String, Integer> debtors, HashMap<String, Integer> creditors) {
-        for (Map.Entry<String, Integer> entryDebtors : debtors.entrySet()) {
-            for (Map.Entry<String, Integer> entryCreditors : creditors.entrySet()) {
+    private void giveResult(HashMap<String, Double> debtors, HashMap<String, Double> creditors) {
+        for (Map.Entry<String, Double> entryDebtors : debtors.entrySet()) {
+            for (Map.Entry<String, Double> entryCreditors : creditors.entrySet()) {
 
                 String creditorKey = entryCreditors.getKey();
-                int creditorValue = entryCreditors.getValue();
+                double creditorValue = entryCreditors.getValue();
                 String debtorKey = entryDebtors.getKey();
-                int debtorValue = entryDebtors.getValue();
+                double debtorValue = entryDebtors.getValue();
 
                 if (debtorValue <= creditorValue && debtorValue != 0) {
                     resultString
@@ -253,24 +262,21 @@ public class MainController implements Initializable {
                             .append(" --> ")
                             .append(creditorKey)
                             .append(" ")
-                            .append(debtorValue)
+                            .append(roundDoubleTo2Dec(debtorValue))
                             .append("\n");
-                    debtors.put(debtorKey, 0);
+                    debtors.put(debtorKey, 0.00);
                     creditors.put(creditorKey, (creditorValue - debtorValue));
                 }
             }
         }
 
-        System.out.println(debtors + "\n");
-        System.out.println(creditors + "\n" + "BREAK!");
-
-        for (Map.Entry<String, Integer> entryCreditors : creditors.entrySet()) {
-            for (Map.Entry<String, Integer> entryDebtors : debtors.entrySet()) {
+        for (Map.Entry<String, Double> entryCreditors : creditors.entrySet()) {
+            for (Map.Entry<String, Double> entryDebtors : debtors.entrySet()) {
 
                 String creditorKey = entryCreditors.getKey();
-                int creditorValue = entryCreditors.getValue();
+                double creditorValue = entryCreditors.getValue();
                 String debtorKey = entryDebtors.getKey();
-                int debtorValue = entryDebtors.getValue();
+                double debtorValue = entryDebtors.getValue();
 
                 if (creditorValue <= debtorValue && creditorValue != 0) {
                     resultString
@@ -278,17 +284,13 @@ public class MainController implements Initializable {
                             .append(" --> ")
                             .append(creditorKey)
                             .append(" ")
-                            .append(creditorValue)
+                            .append(roundDoubleTo2Dec(creditorValue))
                             .append("\n");
-                    creditors.put(creditorKey, 0);
+                    creditors.put(creditorKey, 0.00);
                     debtors.put(debtorKey, (debtorValue - creditorValue));
                 }
             }
         }
-
-        System.out.println(resultString.toString() + "\n");
-        System.out.println(debtors + "\n");
-        System.out.println(creditors);
 
         if (resultString.toString().equals("")) {
             txtareaTransactions.setText("All payed equally.");
@@ -298,8 +300,8 @@ public class MainController implements Initializable {
         resultString.setLength(0);
     }
 
-    private HashMap<String, Integer> getDebtors(ObservableList<Person> personList) {
-        HashMap<String, Integer> debtors = new HashMap<>();
+    private HashMap<String, Double> getDebtors(ObservableList<Person> personList) {
+        HashMap<String, Double> debtors = new HashMap<>();
         for (int x = PERSON_REPRESENTS_ALL_INDEX; x < personList.size(); x++) {
             Person person = personList.get(x);
             if (!person.isOverAveragePrice()) {
@@ -309,8 +311,8 @@ public class MainController implements Initializable {
         return debtors;
     }
 
-    private HashMap<String, Integer> getCreditors(ObservableList<Person> personList) {
-        HashMap<String, Integer> creditors = new HashMap<>();
+    private HashMap<String, Double> getCreditors(ObservableList<Person> personList) {
+        HashMap<String, Double> creditors = new HashMap<>();
         for (int x = PERSON_REPRESENTS_ALL_INDEX; x < personList.size(); x++) {
             Person person = personList.get(x);
             if (person.isOverAveragePrice()) {
@@ -320,7 +322,7 @@ public class MainController implements Initializable {
         return creditors;
     }
 
-    private boolean canProceedFurther(int total, ObservableList<Person> list) {
+    private boolean canProceedFurther(double total, ObservableList<Person> list) {
         if (total == 0) {
             alertInformation("Alert", "Nothing to calculate");
             return false;
@@ -332,12 +334,12 @@ public class MainController implements Initializable {
         return true;
     }
 
-    private void evaluateCreditorsAndDebtors(ObservableList<Person> personList, int average) {
+    private void evaluateCreditorsAndDebtors(ObservableList<Person> personList, double average) {
         evaluateIfPersonExpensesAreOverAverage(personList, average);
         calculateTheDifference(personList, average);
     }
 
-    private void evaluateIfPersonExpensesAreOverAverage(ObservableList<Person> personList, int average) {
+    private void evaluateIfPersonExpensesAreOverAverage(ObservableList<Person> personList, double average) {
         for (int x = PERSON_REPRESENTS_ALL_INDEX; x < personList.size(); x++) {
             Person person = personList.get(x);
             if (person.getTotalExpenses() > average) {
@@ -348,7 +350,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void calculateTheDifference(ObservableList<Person> personList, int average) {
+    private void calculateTheDifference(ObservableList<Person> personList, double average) {
         for (int x = PERSON_REPRESENTS_ALL_INDEX; x < personList.size(); x++) {
             Person person = personList.get(x);
             if (person.isOverAveragePrice()) {
@@ -367,11 +369,16 @@ public class MainController implements Initializable {
         alert.showAndWait();
     }
 
-    private int stringToInt(String string) {
-        return Integer.parseInt(string);
+    private double stringToDouble(String string) {
+        return Double.parseDouble(string);
     }
 
-    private String intToString(int x) {
+    private String doubleToString(double x) {
         return String.valueOf(x);
+    }
+
+    private String roundDoubleTo2Dec(double number) {
+        DecimalFormat f = new DecimalFormat("0.00");
+        return f.format(number);
     }
 }
