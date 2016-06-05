@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.AddServiceController">
+   <children>
+      <ChoiceBox fx:id="chboxChoosePerson" layoutX="17.0" layoutY="77.0" prefWidth="150.0" />
+      <Label layoutX="16.0" layoutY="60.0" text="Choose person" />
+      <TextField fx:id="txtServiceName" layoutX="17.0" layoutY="129.0" />
+      <Label layoutX="17.0" layoutY="110.0" text="Service" />
+      <Label layoutX="17.0" layoutY="162.0" text="Price" />
+      <TextField fx:id="txtPrice" layoutX="17.0" layoutY="179.0" />
+      <Label layoutX="41.0" layoutY="14.0" text="Add Service">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnCancelService" cancelButton="true" layoutX="17.0" layoutY="219.0" mnemonicParsing="false" onAction="#actionClose" prefHeight="27.0" prefWidth="70.0" text="Cancel" />
+      <Button fx:id="btnSubmitService" defaultButton="true" layoutX="116.0" layoutY="219.0" mnemonicParsing="false" onAction="#actionAddService" prefHeight="27.0" prefWidth="70.0" text="Submit" />
+   </children>
+</Pane>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.MainController">
+    <children>
+        <Label alignment="CENTER" layoutX="161.0" layoutY="2.0" text="Expenses leveling">
+            <font>
+                <Font name="System Bold" size="21.0" />
+            </font>
+        </Label>
+        <Button fx:id="btnAddName" layoutX="95.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Add Name" />
+        <Button fx:id="btnAddService" layoutX="202.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Add service" />
+        <Button layoutX="308.0" layoutY="45.0" mnemonicParsing="false" onAction="#levelExpenses" prefWidth="100.0" text="Calculate" />
+        <ListView fx:id="namesList" layoutX="14.0" layoutY="90.0" prefHeight="232.0" prefWidth="189.0" />
+      <TableView fx:id="tableService" layoutX="14.0" layoutY="331.0" prefHeight="200.0" prefWidth="475.0">
+        <columns>
+          <TableColumn fx:id="colService" prefWidth="300.0" resizable="false" text="Service" />
+          <TableColumn fx:id="colPrice" prefWidth="174.0" resizable="false" text="Price" />
+        </columns>
+      </TableView>
+      <Label fx:id="lblPersonTotal" layoutX="14.0" layoutY="548.0" text="Total: 0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="220.0" layoutY="90.0" text="Total:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="222.0" layoutY="117.0" text="Average:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblTotal" layoutX="308.0" layoutY="90.0" text="0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblAverage" layoutX="308.0" layoutY="117.0" text="0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="222.0" layoutY="149.0" text="Transactions to be made:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="txtareaTransactions" editable="false" layoutX="222.0" layoutY="169.0" prefHeight="154.0" prefWidth="267.0" />
+    </children>
+</Pane>
