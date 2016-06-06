@@ -57,6 +57,9 @@ public class AddServiceController {
         service.setPerson((Person) chboxChoosePerson.getValue());
         if (!isServiceValid()){
             alertInformation("Alert", "Don't leave blank fiend.\n" + "Use . to separate decimals");
+            service.setServiceName("");
+            service.setPerson(null);
+            service.setPrice("");
             return;
         }
         actionClose(actionEvent);
